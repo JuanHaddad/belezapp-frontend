@@ -1,0 +1,127 @@
+<h2>Agenda</h2>
+
+<div style="
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+">
+  <button mat-raised-button color="primary" routerLink="/clientes">Clientes</button>
+  <button mat-raised-button color="accent" routerLink="/servicos">Serviços</button>
+  <button mat-raised-button color="warn" routerLink="/atendimentos">Atendimentos</button>
+</div>
+
+<div style="min-width: 320px;">
+  <full-calendar [options]="calendarOptions"></full-calendar>
+</div>
+
+<!-- Detalhes do dia selecionado -->
+<div #detalhesDia *ngIf="dataSelecionada" style="margin-top: 32px;">
+
+  <h3>Atendimentos em {{ dataSelecionada | date: 'fullDate' }}</h3>
+
+  <button mat-raised-button color="primary" style="margin-bottom: 16px;" (click)="novoAtendimentoParaDia()">
+    Novo Atendimento para o dia
+  </button>
+
+  <!-- Formulário de novo atendimento -->
+  <div *ngIf="exibindoFormulario"
+    style="margin-bottom: 16px; padding: 16px; border: 1px solid #ccc; border-radius: 8px;">
+
+    <h4>Novo Atendimento em {{ dataSelecionada | date: 'fullDate' }}</h4>
+
+    <!-- Cliente -->
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+      <mat-label>Cliente</mat-label>
+      <mat-select [(ngModel)]="novoAtendimento.cliente.id">
+        <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
+          {{ cliente.nome }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Serviços (multiselect) -->
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+      <mat-label>Serviços</mat-label>
+      <mat-select [(ngModel)]="novoAtendimento.servicos" multiple>
+        <mat-option *ngFor="let servico of servicos" [value]="{ id: servico.id }">
+          {{ servico.descricao }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Hora (campo hora simples) -->
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+      <mat-label>Hora de Início</mat-label>
+      <input matInput type="time" [(ngModel)]="horaSelecionada" (ngModelChange)="ajustarHora($event)">
+    </mat-form-field>
+
+
+    <!-- Preço -->
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+      <mat-label>Preço Cobrado (R$)</mat-label>
+      <input matInput type="number" [(ngModel)]="novoAtendimento.precoCobrado">
+    </mat-form-field>
+
+    <!-- Cor usada -->
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+      <mat-label>Cor Usada</mat-label>
+      <input matInput [(ngModel)]="novoAtendimento.corUsada">
+    </mat-form-field>
+
+    <!-- Observações -->
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+      <mat-label>Observações</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="novoAtendimento.observacoes"></textarea>
+    </mat-form-field>
+
+    <!-- Botões -->
+    <button mat-raised-button color="primary" (click)="salvarAtendimento()">Salvar Atendimento</button>
+    <button mat-button (click)="exibindoFormulario = false" style="margin-left: 8px;">Cancelar</button>
+
+  </div>
+
+
+
+<div style="overflow-x: auto;">
+  
+  <!-- Se houver atendimentos -->
+  <table *ngIf="atendimentosDoDia.length > 0" mat-table [dataSource]="atendimentosDoDia" class="mat-elevation-z8"
+    style="width: 100%;">
+  
+    <!-- Cliente Column -->
+    <ng-container matColumnDef="cliente">
+      <th mat-header-cell *matHeaderCellDef> Cliente </th>
+      <td mat-cell *matCellDef="let atendimento"> {{ atendimento.cliente.nome }} </td>
+    </ng-container>
+  
+    <!-- Hora Column -->
+    <ng-container matColumnDef="hora">
+      <th mat-header-cell *matHeaderCellDef> Hora </th>
+      <td mat-cell *matCellDef="let atendimento">
+        {{ atendimento.dataHoraInicio | date: 'shortTime' }}
+      </td>
+    </ng-container>
+  
+    <!-- Serviços Column -->
+    <ng-container matColumnDef="servicos">
+      <th mat-header-cell *matHeaderCellDef> Serviços </th>
+      <td mat-cell *matCellDef="let atendimento">
+        {{ getDescricaoServicos(atendimento) }}
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="['cliente', 'hora', 'servicos']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['cliente', 'hora', 'servicos'];"></tr>
+  
+  </table>
+</div>
+
+
+  <!-- Se não houver atendimentos -->
+  <div *ngIf="atendimentosDoDia.length === 0" style="margin-top: 8px;">
+    Nenhum atendimento neste dia.
+  </div>
+
+</div>

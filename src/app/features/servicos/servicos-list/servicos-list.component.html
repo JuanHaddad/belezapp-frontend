@@ -1,0 +1,74 @@
+<h2>Serviços</h2>
+
+<div style="margin-bottom: 16px; display: flex; gap: 8px;">
+  <button mat-raised-button color="warn" routerLink="/agenda">Ir para Agenda</button>
+</div>
+
+<div style="margin-bottom: 16px;">
+  <button mat-raised-button color="primary" (click)="exibindoFormulario = !exibindoFormulario">
+    {{ exibindoFormulario ? 'Cancelar' : 'Novo Serviço' }}
+  </button>
+
+  <mat-form-field appearance="outline" style="margin-left: 16px;">
+    <mat-label>Buscar serviços</mat-label>
+    <input matInput [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro()" placeholder="Digite descrição">
+  </mat-form-field>
+</div>
+
+<div *ngIf="exibindoFormulario" style="margin-bottom: 16px; padding: 16px; border: 1px solid #ccc; border-radius: 8px;">
+  <h3>Novo Serviço</h3>
+
+  <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+    <mat-label>Descrição</mat-label>
+    <input matInput [(ngModel)]="novoServico.descricao" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+    <mat-label>Duração Padrão (minutos)</mat-label>
+    <input matInput type="number" [(ngModel)]="novoServico.duracaoPadrao">
+  </mat-form-field>
+
+
+  <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
+    <mat-label>Observações</mat-label>
+    <textarea matInput rows="3" [(ngModel)]="novoServico.observacoes"></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="salvarServico()">Salvar</button>
+</div>
+
+
+<div style="overflow-x: auto;">
+  
+  
+  <table mat-table [dataSource]="servicosFiltrados" class="mat-elevation-z8" style="width: 100%;">
+  
+    <!-- Descrição Column -->
+    <ng-container matColumnDef="descricao">
+      <th mat-header-cell *matHeaderCellDef> Descrição </th>
+      <td mat-cell *matCellDef="let servico"> {{servico.descricao}} </td>
+    </ng-container>
+  
+    <!-- Duração Column -->
+    <ng-container matColumnDef="duracaoPadrao">
+      <th mat-header-cell *matHeaderCellDef> Duração (min) </th>
+      <td mat-cell *matCellDef="let servico"> {{servico.duracaoPadrao}} </td>
+    </ng-container>
+  
+  
+    <!-- Ações -->
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef> Ações </th>
+      <td mat-cell *matCellDef="let servico">
+        <button mat-icon-button color="warn" (click)="excluirServico(servico.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="['descricao', 'duracaoPadrao', 'acoes']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['descricao', 'duracaoPadrao', 'acoes'];"></tr>
+  
+  
+  </table>
+</div>
