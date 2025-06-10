@@ -50,6 +50,7 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
+              "baseHref": "/",
               "budgets": [
                 {
                   "type": "initial",
