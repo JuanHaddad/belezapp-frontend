@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../enviroments/enviroment';
 
 export interface Servico {
   id: number;
@@ -15,7 +16,7 @@ export interface Servico {
 })
 export class ServicoService {
 
-  private apiUrl = 'https://belezapp.onrender.com/api/servicos';
+  private apiUrl = `${environment.apiUrl}/servicos`;
 
   constructor(private http: HttpClient) { }
 

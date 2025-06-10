@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Cliente } from './cliente.service';
 import { Servico } from './servico.service';
+import { environment } from '../../../enviroments/enviroment';
 
 export interface Atendimento {
   id: number;
@@ -29,7 +30,7 @@ export interface AtendimentoRequest {
 })
 export class AtendimentoService {
 
-  private apiUrl = 'https://belezapp.onrender.com/api/atendimentos';
+  private apiUrl = `${environment.apiUrl}/atendimentos`;
 
   constructor(private http: HttpClient) { }
 

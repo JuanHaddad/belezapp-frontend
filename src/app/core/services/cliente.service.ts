@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../enviroments/enviroment';
 
 export interface Cliente {
   id: number;
@@ -15,7 +16,7 @@ export interface Cliente {
 })
 export class ClienteService {
 
-  private apiUrl = 'https://belezapp.onrender.com/api/clientes';
+  private apiUrl = `${environment.apiUrl}/clientes`;
 
   constructor(private http: HttpClient) { }
 
